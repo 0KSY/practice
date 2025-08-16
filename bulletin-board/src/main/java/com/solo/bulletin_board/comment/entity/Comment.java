@@ -1,8 +1,7 @@
-package com.solo.bulletin_board.posting.entity;
+package com.solo.bulletin_board.comment.entity;
 
-import com.solo.bulletin_board.comment.entity.Comment;
 import com.solo.bulletin_board.member.entity.Member;
-import com.solo.bulletin_board.postingTag.entity.PostingTag;
+import com.solo.bulletin_board.posting.entity.Posting;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,20 +15,14 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Posting {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postingId;
-
-    @Column(nullable = false)
-    private String title;
+    private Long commentId;
 
     @Column(nullable = false)
     private String content;
-
-    @Column(nullable = false)
-    private int viewCount;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -41,9 +34,15 @@ public class Posting {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
-    private List<Comment> comments = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "POSTING_ID")
+    private Posting posting;
 
-    @OneToMany(mappedBy = "posting", cascade = CascadeType.ALL)
-    private List<PostingTag> postingTags = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "PARENT_COMMENT_ID")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+    private List<Comment> children = new ArrayList<>();
+
 }
