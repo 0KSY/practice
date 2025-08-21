@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -40,6 +41,16 @@ public class MemberController {
 
         return ResponseEntity.created(location).build();
 
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity postImage(@RequestPart("file")MultipartFile multipartFile,
+                                    @AuthenticationPrincipal CustomUserDetails customUserDetails){
+
+        Member member = memberService.uploadImage(multipartFile, customUserDetails.getMemberId());
+
+        return new ResponseEntity(new SingleResponseDto<>(
+                mapper.memberToMemberImageResponseDto(member)), HttpStatus.CREATED);
     }
 
     @PatchMapping

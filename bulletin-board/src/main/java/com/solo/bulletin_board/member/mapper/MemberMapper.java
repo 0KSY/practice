@@ -10,4 +10,5 @@ public interface MemberMapper {
     Member memberPostDtoToMember(MemberDto.Post memberPostDto);
     Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto);
     MemberDto.Response memberToMemberResponseDto(Member member);
+    MemberDto.ImageResponse memberToMemberImageResponseDto(Member member);
 }
